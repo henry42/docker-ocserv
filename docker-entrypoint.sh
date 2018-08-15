@@ -77,13 +77,6 @@ EOF
 	certtool --generate-crl --load-ca-privkey ca-key.pem --load-ca-certificate ca-cert.pem --template crl.tmpl --outfile crl.pem
 fi
 
-if [ -n "$ROUTE" ]; then
-	if [ "$ROUTE" = "refresh" ];then
-		sh /root/chnroute_to_ocserv.sh "/etc/ocserv/config-per-group/cnroute"
-		cp "/etc/ocserv/config-per-group/cnroute" "/etc/ocserv/defaults/user.conf"
-	fi
-fi
-
 # Open ipv4 ip forward
 sysctl -w net.ipv4.ip_forward=1
 

@@ -1,12 +1,11 @@
-FROM python:3.6.3-alpine3.6
+FROM alpine:3.7
 
 MAINTAINER Henry <hyliang8497@gmail.com>
 
-ENV OC_VERSION=0.11.9
+ENV OC_VERSION=0.12.1
 
 WORKDIR /root/
 
-COPY chnroute_to_ocserv.sh .
 COPY ocserv ocserv
 COPY create_user.sh /usr/local/sbin/create_ocserv_user.sh
 COPY docker-entrypoint.sh /entrypoint.sh
@@ -29,7 +28,6 @@ RUN buildDeps=" \
 		xz \
 	"; \
 	set -x \
-	&& pip install netaddr \
 	&& apk add --update --virtual .build-deps $buildDeps \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz" -o ocserv.tar.xz \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz.sig" -o ocserv.tar.xz.sig \
@@ -54,9 +52,6 @@ RUN buildDeps=" \
 	&& apk del .build-deps \
 	&& rm -rf /var/cache/apk/*
 
-# Setup config
-#RUN sh /root/chnroute_to_ocserv.sh "/etc/ocserv/config-per-group/cnroute" \
-#	&& cp "/etc/ocserv/config-per-group/cnroute" "/etc/ocserv/defaults/user.conf"
 
 ENTRYPOINT ["/entrypoint.sh"]
 
